@@ -1,5 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 import httpx
 
@@ -86,13 +87,10 @@ def verify_payment(reference: str, db: Session = Depends(get_db)):
     except Exception:
         pass
 
-    return PaymentVerifyResponse(
-        status="success",
-        reference=reference,
-        amount=data["data"]["amount"] / 100,
-        order_id=order.id,
+   return RedirectResponse(
+        url=f"https://solhydra.vercel.app/payment/callback?reference={reference}",
+        status_code=302
     )
-
 
 @router.post("/webhook")
 async def paystack_webhook(request: Request, db: Session = Depends(get_db)):
