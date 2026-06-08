@@ -87,7 +87,7 @@ def verify_payment(reference: str, db: Session = Depends(get_db)):
     except Exception:
         pass
 
-   return RedirectResponse(
+    return RedirectResponse(
         url=f"https://solhydra.vercel.app/payment/callback?reference={reference}",
         status_code=302
     )
